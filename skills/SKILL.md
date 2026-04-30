@@ -1,6 +1,6 @@
 ---
 name: create-a-pr-safely
-description: Use when the user wants Claude to implement a JIRA ticket end-to-end (branch, code, commit, PR) following team conventions.
+description: Use when the user asks to implement a JIRA ticket and create a PR following team branch/commit/PR conventions.
 ---
 # Create a PR Safely (JIRA-driven)
 
@@ -12,6 +12,21 @@ This skill implements a JIRA ticket end-to-end with disciplined hygiene: correct
 3) Do NOT commit secrets. If any secret-like content appears (tokens/keys/passwords), stop and ask the user how to proceed.
 4) Do NOT implement beyond the ticket scope. If the ticket is ambiguous or missing acceptance criteria, stop and ask for clarification or require the user to paste the missing details.
 </HARD-GATES>
+
+## Quick Reference
+
+| Step | Action | Gate? |
+|------|--------|-------|
+| 1 | Read + restate ticket | Ask if ACs ambiguous |
+| 2 | Plan (branch, files, verify) | **User approval required** |
+| 3 | Sync base branch | Stop if diverged |
+| 4 | Create branch | Must match pattern |
+| 5 | Implement to ACs | Stop if requirements missing |
+| 6 | Verify locally (tests/lint/build) | Fix before committing |
+| 7 | Diff review | Stop if unrelated changes or secrets |
+| 8 | Commit with ticket ID | 1–3 commits max |
+| 9 | Push (no force) | — |
+| 10 | Create PR + confirm CI | Triage if CI fails |
 
 ## Required conventions (must be known)
 Before starting, you must know or ask for:
@@ -123,3 +138,14 @@ PR body must include:
 - Notes / follow-ups (if any)
 
 After creating the PR, confirm CI started. If CI fails, switch to a CI-triage flow (identify failing workflow/job/step, extract exact error, reproduce locally if possible, fix minimally, push, re-check).
+
+## Common Mistakes
+
+| Mistake | Fix |
+|---------|-----|
+| Starting to code before user approves the plan | Always present plan + wait for approval (step 2) |
+| Branch name doesn't include JIRA ID | Derive from ticket ID exactly as given, case-preserved |
+| Committing unrelated files (e.g. editor config, lockfile noise) | Run diff review gate (step 7) before every commit |
+| Pushing directly to base branch | Always create a feature branch first |
+| Opening PR before local verification passes | Complete step 6 first; only skip with explicit "WIP PR" request |
+| Guessing at missing acceptance criteria | Stop and ask — never fill gaps silently |
