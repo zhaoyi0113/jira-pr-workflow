@@ -1,0 +1,13 @@
+{
+  "name": "jira-pr-workflow",
+  "owner": {
+    "name": "Joey Zhao"
+  },
+  "plugins": [
+    {
+      "name": "jira-pr-workflow",
+      "source": ".",
+      "description": "Use when the user wants Claude to implement a JIRA ticket end-to-end (branch, code, commit, PR) following team conventions."
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "name": "jira-pr-workflow",
+  "description": "This skill implements a JIRA ticket end-to-end with disciplined hygiene: correct base branch, correct branch naming, acceptance-criteria-driven implementation, verified locally, clean commits, and a PR title/body that follows a predefined format.",
+  "version": "1.0.0"
+}
